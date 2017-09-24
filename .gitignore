@@ -1,9 +1,24 @@
+# Android Studio
 *.iml
 .gradle
 /local.properties
+# .idea
 /.idea/workspace.xml
 /.idea/libraries
 .DS_Store
 /build
 /captures
 .externalNativeBuild
+
+# Windows thumbnail db
+Thumbs.db
+
+# OSX files
+.DS_Store
+
+# Eclipse project files
+.classpath
+.project
+
+#NDK
+obj/
