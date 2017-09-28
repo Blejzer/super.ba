@@ -1,9 +1,29 @@
 <resources>
     <string name="app_name">Super</string>
     <string name="title_activity_main_pref">MainPrefActivity</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
+    <string name="news_name_24sata">24sata info</string>
+    <string name="news_name_6yka">6yka magazin</string>
+    <string name="news_name_aljazeera">Aljazeera Balkans</string>
+    <string name="news_name_avaz">Avaz</string>
+    <string name="news_name_cin">CIN</string>
+    <string name="news_name_faktor">Faktor</string>
+    <string name="news_name_klix">Klix</string>
+    <string name="news_name_n1info">N1 Info</string>
+    <string name="news_name_radios">Radio Sarajevo</string>
+    <string name="settings_subtitle">News Media</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="konekcija">Trenutno nemate mrežnu konekciju! Da bi aplikacija radila, potrebno je da imate pristup internetu putem WiFi ili mobilnog interneta!</string>
+    <string name="confirmation">U redu</string>
+
+
 </resources>

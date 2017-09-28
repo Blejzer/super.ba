@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group>
+    <item android:title="News feed"
+        android:icon="@mipmap/ic_launcher">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/sata"
+                    android:src="@mipmap/ic_news_24sata"
+                    android:defaultValue="true"
+                    android:key="24sata"
+                    app:showAsAction="always"
+                    android:title="@string/news_name_24sata"/>
+
+                <item
+                    android:id="@+id/buka"
+                    android:defaultValue="true"
+                    android:key="6yka"
+                    android:title="@string/news_name_6yka"/>
+                <item
+                    android:id="@+id/avaz"
+                    android:defaultValue="true"
+                    android:key="avaz"
+                    android:title="@string/news_name_avaz"/>
+                <item
+                    android:id="@+id/aljazeera"
+                    android:defaultValue="true"
+                    android:key="aljazeera"
+                    android:title="@string/news_name_aljazeera"/>
+                <item
+                    android:id="@+id/faktor"
+                    android:defaultValue="true"
+                    android:key="faktor"
+                    android:title="@string/news_name_faktor"/>
+                <item
+                    android:id="@+id/cin"
+                    android:defaultValue="true"
+                    android:key="cin"
+                    android:title="@string/news_name_cin"/>
+                <item
+                    android:id="@+id/klix"
+                    android:defaultValue="true"
+                    android:key="klix"
+                    android:title="@string/news_name_klix"/>
+                <item
+                    android:id="@+id/n1info"
+                    android:defaultValue="true"
+                    android:key="n1info"
+                    android:title="@string/news_name_n1info"/>
+                <item
+                    android:id="@+id/radios"
+                    android:defaultValue="true"
+                    android:key="radios"
+                    android:title="@string/news_name_radios"/>
+            </group>
+        </menu>
+    </item>
+    </group>
+</menu>
