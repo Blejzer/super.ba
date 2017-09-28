@@ -10,7 +10,7 @@ public class OAuth2Client {
     private final String password;
     private final String clientId;
     private final String clientSecret;
-    private final String site;
+    private String site;
 
     public OAuth2Client(String username, String password, String clientId, String clientSecret, String site) {
         this.username = username;
@@ -32,6 +32,10 @@ public class OAuth2Client {
 
     public String getClientId() {
         return clientId;
+    }
+
+    public void setSite(String site){
+        this.site = site;
     }
 
 

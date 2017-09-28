@@ -61,3 +61,45 @@
     </item>
     </group>
 </menu>
+
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="24sata"
+            android:title="@string/news_name_24sata"/>
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="6yka"
+            android:title="@string/news_name_6yka"/>
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="avaz"
+            android:title="@string/news_name_avaz"/>
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="aljazeera"
+            android:title="@string/news_name_aljazeera"/>
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="faktor"
+            android:title="@string/news_name_faktor"/>
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="cin"
+            android:title="@string/news_name_cin"/>
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="n1info"
+            android:title="@string/news_name_n1info"/>
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="radios"
+            android:title="@string/news_name_radios"/>
+
+
+</PreferenceScreen>
+

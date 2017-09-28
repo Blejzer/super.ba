@@ -157,7 +157,7 @@ public class OAuthUtils {
                     code = response.getStatusLine().getStatusCode();
                     if (code >= 400) {
                         throw new RuntimeException(
-                                "Could not retrieve access token for user: "
+                                code + " Could not retrieve access token for user: "
                                         + oauthDetails.getUsername());
                     }
                 }

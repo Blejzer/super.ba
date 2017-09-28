@@ -16,8 +16,6 @@ import android.widget.Toast;
 
 import info.bdslab.android.asuper.R;
 
-import static android.app.Activity.RESULT_OK;
-
 /**
  * Created by nikola on 28/09/2017.
  */
@@ -102,7 +100,7 @@ public class Tester extends Activity {
             return false;
         }
     }
-    private void buildAlertMessageNoWiFi() {
+    public void buildAlertMessageNoWiFi() {
         LayoutInflater li = LayoutInflater.from(this);
         View promptsView = li.inflate(R.layout.konekcija, null);
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
