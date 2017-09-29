@@ -34,6 +34,8 @@ import info.bdslab.android.asuper.Utils.Utils;
 
 public class LaunchActivity extends Activity {
 
+    private final String LOG_LAUNCH = "LaunchActivity log";
+
     //prefs
     SharedPreferences prefs;
 
@@ -75,6 +77,7 @@ public class LaunchActivity extends Activity {
             }, 2100);
 
         } else{
+            //TODO create warning activity for testing internet connection
             buildAlertMessageNoWiFi();
             setResult(RESULT_CANCELED, returnIntent);
             finish();
@@ -87,8 +90,8 @@ public class LaunchActivity extends Activity {
     class MyAsyncTask extends AsyncTask<String, String, Void> {
 
         private ProgressDialog progressDialog = new ProgressDialog(LaunchActivity.this);
-//        InputStream inputStream = null;
-        String result = "";
+        SharedPreferences sharedPreferences;
+        String sourcesList;
 
         @Override
         protected Void doInBackground(String... strings) {
@@ -110,27 +113,25 @@ public class LaunchActivity extends Activity {
             Token token = oAuth2Client.getAccessToken();
 
             oAuth2Client.setSite(site);
-            String test = token.getResource(oAuth2Client, token, pathApiVersion);
-            Log.i("Api Version: ", test);
 
-            String sourcesList = token.getResource(oAuth2Client, token, pathSources);
-            SharedPreferences sharedPreferences;
+            sourcesList = token.getResource(oAuth2Client, token, pathSources);
 
             PreferenceManager.setDefaultValues(LaunchActivity.this, R.xml.sources, false);
             sharedPreferences = android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(LaunchActivity.this);
+
+
+//            Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
+
             SharedPreferences.Editor editor = sharedPreferences.edit();
-
-            Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
-            Log.i("TESTIRAMO prije: ", String.valueOf(sharedPreferences.contains("avaz")));
-            for (Map.Entry<String, ?> entry : sharedPreferencesAll.entrySet()) {
-
-                Log.d("map values", entry.getKey() + ": " + entry.getValue().toString());
-
-                editor.remove(entry.getKey());
-            }
-            editor.apply();
-
-            Log.i("TESTIRAMO nakon: ", String.valueOf(sharedPreferences.contains("avaz")));
+//            Log.i(LOG_LAUNCH,"TEST prije brisanja: " + String.valueOf(sharedPreferences.contains("Avaz")));
+//            for (Map.Entry<String, ?> entry : sharedPreferencesAll.entrySet()) {
+//
+//                Log.d(LOG_LAUNCH,"map values" + entry.getKey() + ": " + entry.getValue().toString());
+//
+//                editor.remove(entry.getKey());
+//            }
+            editor.clear().apply();
+            Log.i(LOG_LAUNCH,"TEST nakon brisanja: " + String.valueOf(sharedPreferences.contains("Avaz")));
 
 
             return null;
@@ -149,30 +150,49 @@ public class LaunchActivity extends Activity {
         protected void onPostExecute(Void v) {
             //parse JSON data
             try {
-                JSONArray jArray = new JSONArray(result);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                Log.i(LOG_LAUNCH,"Sources: " + sourcesList);
+                JSONObject jsonObject = null;
+                JSONArray jsonArray = null;
 
-                for(int i=0; i < jArray.length(); i++) {
+                jsonObject = new JSONObject(sourcesList);
+                jsonArray = jsonObject.getJSONArray("sources");
+                for (int j = 0; j < jsonArray.length(); j++) {
+                    JSONObject jobj = jsonArray.getJSONObject(j);
 
-                    JSONObject jObject = jArray.getJSONObject(i);
-
-                    String name = jObject.getString("name");
-                    String tab1_text = jObject.getString("tab1_text");
-                    int active = jObject.getInt("active");
-
-                } // End Loop
-
-                JSONArray arr = new JSONArray(result);
-
-                List<String> list = new ArrayList<String>();
-
-                for(int i = 0; i < arr.length(); i++){
-
-                    String info = arr.getJSONObject(i).getString("name");
-                    list.add(info);
+                    editor.putString(jobj.getString("title"), jobj.getString("logo"));
+                    Log.i(LOG_LAUNCH,"Title: " + jobj.getString("title"));
+                    Log.i(LOG_LAUNCH,"Logo: " + jobj.getString("logo"));
                 }
+                editor.apply();
+
+                Log.i(LOG_LAUNCH,"TEST nakon try: " + String.valueOf(sharedPreferences.contains("Avaz")));
 
 
-                this.progressDialog.dismiss();
+
+//                JSONArray jArray = new JSONArray(result);
+//
+//                for(int i=0; i < jArray.length(); i++) {
+//
+//                    JSONObject jObject = jArray.getJSONObject(i);
+//
+//                    String name = jObject.getString("name");
+//                    String tab1_text = jObject.getString("tab1_text");
+//                    int active = jObject.getInt("active");
+//
+//                } // End Loop
+//
+//                JSONArray arr = new JSONArray(result);
+//
+//                List<String> list = new ArrayList<String>();
+//
+//                for(int i = 0; i < arr.length(); i++){
+//
+//                    String info = arr.getJSONObject(i).getString("name");
+//                    list.add(info);
+//                }
+
+//                this.progressDialog.dismiss();
             } catch (JSONException e) {
                 Log.e("JSONException", "Error: " + e.toString());
             } // catch (JSONException e)

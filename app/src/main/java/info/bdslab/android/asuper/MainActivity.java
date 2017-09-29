@@ -19,6 +19,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
 
     private ListView mDrawerList;
@@ -66,7 +70,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void addDrawerItems() {
-        String[] osArray = {  };
+        String[] osArray = new String[]{};
+        List<String> where = new ArrayList<String>();
+        Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
+        for (Map.Entry<String, ?> entry : sharedPreferencesAll.entrySet()) {
+            where.add(entry.getKey());
+        }
+
+        osArray = new String[ where.size() ];
+        where.toArray( osArray );
+
 
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
