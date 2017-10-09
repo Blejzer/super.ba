@@ -17,50 +17,95 @@
             tools:context=".MainActivity"
             android:background="#ffffffff">
             <EditText
-                android:id="@+id/emailText"
+            android:id="@+id/emailText"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_height="wrap_content"
+
+            android:hint="Search the news"
+            android:inputType="textEmailAddress" />
+            <Button
+            android:id="@+id/queryButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_alignEnd="@+id/emailText"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
+            android:text="Search"/>
+            <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:indeterminate="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone" />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/scrollView2">
+
+                <ListView
+                android:id="@+id/responseView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:hint="Enter email address"/>
-            <Button
-                android:id="@+id/queryButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                style="@style/Base.Widget.AppCompat.Button.Colored"
-                android:text="Search"/>
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="Holy Operating Systems, Batdroid!"
-                android:textSize="24sp"
-                android:gravity="center"
                 android:layout_marginTop="100dp"/>
+                </ScrollView>
 
-            <!--<ImageView-->
+            </LinearLayout>
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_alignParentTop="true">-->
+                <!--<EditText-->
+                    <!--android:id="@+id/emailText"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_marginLeft="5dp"-->
+                    <!--android:layout_marginRight="5dp"-->
+                    <!--android:layout_height="wrap_content"-->
+
+                    <!--android:hint="Search the news"-->
+                    <!--android:inputType="textEmailAddress" />-->
+                <!--<Button-->
+                <!--android:id="@+id/queryButton"-->
                 <!--android:layout_width="wrap_content"-->
                 <!--android:layout_height="wrap_content"-->
-                <!--android:src="@drawable/ic_launcher"-->
-                <!--android:layout_alignParentBottom="true"-->
-                <!--android:layout_centerHorizontal="true"/>-->
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:indeterminate="true"
-                android:layout_centerHorizontal="true"
-                android:visibility="gone" />
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <ListView
-                    android:id="@+id/responseView"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp" />
-            </ScrollView>
+                <!--android:layout_gravity="end"-->
+                <!--android:layout_alignEnd="@+id/emailText"-->
+                <!--style="@style/Base.Widget.AppCompat.Button.Colored"-->
+                <!--android:text="Search"/>-->
+            <!--</LinearLayout>-->
+
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/textView"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_centerHorizontal="true"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:text="Holy Operating Systems, Batdroid!"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:textSize="24sp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:gravity="center"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginTop="100dp"/>&ndash;&gt;-->
+
+            <!--&lt;!&ndash;<ImageView&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:src="@drawable/ic_launcher"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_alignParentBottom="true"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_centerHorizontal="true"/>&ndash;&gt;-->
+            <!--<ProgressBar-->
+                <!--android:id="@+id/progressBar"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:indeterminate="true"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:visibility="gone" />-->
+
 
         </RelativeLayout>
 

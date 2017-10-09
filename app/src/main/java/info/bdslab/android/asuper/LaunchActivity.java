@@ -30,6 +30,7 @@ import java.util.Map;
 
 import info.bdslab.android.asuper.Library.OAuth2Client;
 import info.bdslab.android.asuper.Library.Token;
+import info.bdslab.android.asuper.Utils.Config;
 import info.bdslab.android.asuper.Utils.Utils;
 
 public class LaunchActivity extends Activity {
@@ -96,25 +97,27 @@ public class LaunchActivity extends Activity {
         @Override
         protected Void doInBackground(String... strings) {
 
+            Config config = new Config();
+
             // grant_type=password&
-            String client_id = "5952144f7e664a87a18c158b_2fpcotn1f8n4so8oo8s4gwg8ogsgk8g48oksc044s0o4k0kow0";
-            String client_secret = "34vrb64rxx8g8kc8s4ck8s4wocc4kcgkws4cookcocog0k8gcw";
-            String username = "iOSApp@super.ba";
-            String password= "thereisnopass";
+//            String client_id = "5952144f7e664a87a18c158b_2fpcotn1f8n4so8oo8s4gwg8ogsgk8g48oksc044s0o4k0kow0";
+//            String client_secret = "34vrb64rxx8g8kc8s4ck8s4wocc4kcgkws4cookcocog0k8gcw";
+//            String username = "iOSApp@super.ba";
+//            String password= "thereisnopass";
+//
+//            String site = "https://super.ba/";
+//            String pathToken = "oauth/v2/token?";
+//            String pathApiVersion = "api";
+//            String pathArticles = "api/v1/articles";
+//            String pathSources = "api/v1/sources";
 
-            String site = "https://super.ba/";
-            String pathToken = "oauth/v2/token?";
-            String pathApiVersion = "api";
-            String pathArticles = "api/v1/articles";
-            String pathSources = "api/v1/sources";
-
-            OAuth2Client oAuth2Client = new OAuth2Client(username, password, client_id, client_secret, site+pathToken);
+            OAuth2Client oAuth2Client = new OAuth2Client(config.getUSERNAME(), config.getPASSWORD(), config.getCLIENT_ID(), config.getCLIENT_SECRET(), config.getSITE()+config.getPATHTOKEN());
 
             Token token = oAuth2Client.getAccessToken();
 
-            oAuth2Client.setSite(site);
+            oAuth2Client.setSite(config.getSITE());
 
-            sourcesList = token.getResource(oAuth2Client, token, pathSources);
+            sourcesList = token.getResource(oAuth2Client, token, config.getPATHSOURCES());
 
             PreferenceManager.setDefaultValues(LaunchActivity.this, R.xml.sources, false);
             sharedPreferences = android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(LaunchActivity.this);
