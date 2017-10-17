@@ -1,4 +1,4 @@
-package info.bdslab.android.asuper;
+package info.bdslab.android.asuper.Services;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -24,7 +24,7 @@ public class FetchDataService extends IntentService {
     private static final String EXTRA_PARAM2 = "info.bdslab.android.asuper.extra.PARAM2";
 
     public FetchDataService() {
-        super("FetchDataService");
+        super(FetchDataService.class.getName());
     }
 
     /**

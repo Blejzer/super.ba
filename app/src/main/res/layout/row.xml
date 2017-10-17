@@ -7,7 +7,7 @@
         android:layout_height="80dp"
         android:layout_centerVertical="true"
         android:layout_margin="5dp"
-        android:background="#444"
+        android:background="@color/colorWhite"
         android:padding="3dp" />
 
     <TextView
@@ -15,74 +15,48 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dip"
-        android:layout_toLeftOf="@+id/tvpubDate"
-        android:layout_toRightOf="@+id/image"
-        android:maxLines="1"
+        android:layout_toEndOf="@+id/image"
+        android:maxLines="3"
         android:text="name"
-        android:textColor="@android:color/white"
-        android:textSize="15dip"
+        android:textSize="15sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tvdescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="75dp"
-        android:layout_marginTop="5dip"
-        android:text="Kreiran: "
-        android:textColor="@android:color/white"
-        android:textSize="12dip" />
+    <ImageView
+        android:id="@+id/tvSmallSourceLogo"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_toStartOf="@+id/tvpubdate"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="35dp"
+        android:background="@color/colorWhite" />
 
     <TextView
-        android:id="@+id/tvpubDate"
+        android:id="@+id/tvpubdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dip"
-        android:text="created"
-        android:textColor="@android:color/white"
-        android:textSize="12dip" />
-
-    <TextView
-        android:id="@+id/tvtextu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="75dp"
-        android:layout_marginTop="65dip"
-        android:text="Azuriran: "
-        android:textColor="@android:color/white"
-        android:textSize="12dip" />
-
-    <TextView
-        android:id="@+id/tvupdated"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="65dip"
-        android:text="updated"
-        android:textColor="@android:color/white"
-        android:textSize="12dip" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="5dp"
+        android:text="Objavljen"
+        android:textSize="8sp" />
 
     <ProgressBar
         android:id="@+id/pbar"
         style="?android:attr/progressBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/image"
+        android:layout_alignEnd="@+id/image"
         android:layout_centerVertical="true"
-        android:layout_marginRight="30dp" />
+        android:layout_marginEnd="30dp" />
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="3dp"
-        android:src="@drawable/ic_action_name" />
+    <!--<ImageView-->
+        <!--android:id="@+id/smallImageView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginEnd="3dp"-->
+        <!--android:src="@drawable/ic_action_name" />-->
 
 </RelativeLayout>

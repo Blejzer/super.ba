@@ -22,7 +22,10 @@
         <activity android:name=".MainActivity" />
 
         <service
-            android:name=".FetchDataService"
+            android:name=".Services.FetchDataService"
+            android:exported="false" />
+        <service
+            android:name=".Services.OAuth2IntentService"
             android:exported="false"></service>
     </application>
 

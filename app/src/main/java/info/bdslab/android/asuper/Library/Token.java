@@ -1,10 +1,14 @@
 package info.bdslab.android.asuper.Library;
 
+import java.io.Serializable;
+
 /**
  * Created by nikola on 27/09/2017.
  */
 
-public class Token {
+public class Token implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final Long expiresIn;
     private final Long expiresAt;

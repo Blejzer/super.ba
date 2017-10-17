@@ -18,7 +18,15 @@ public class Article {
     String category;
     String sentiment;
     String _id;
+    String logo;
 
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
 
     public String getTitle() {
         return title;

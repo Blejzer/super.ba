@@ -64,14 +64,10 @@ public class LaunchActivity extends Activity {
                 }
             }, 2100);
 
-//            ArrayAdapter adapter = new ArrayAdapter<String>(this,R.layout.activity_main);
-//            ListView listView = (ListView) findViewById(R.id.responseView);
-//            listView.setAdapter(adapter);
-
             mHandler.postDelayed(new Runnable() {
                 public void run() {
                     Intent i = new Intent(LaunchActivity.this, MainActivity.class);
-                    // Zatvaramo sve prethodne aktivnosti
+                    Log.e(LOG_LAUNCH, "Zavrsavamo Launch, pokrecem Main!");
                     finish();
                     startActivity(i);
                 }
@@ -125,7 +121,7 @@ public class LaunchActivity extends Activity {
 
 //            Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
 
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
 //            Log.i(LOG_LAUNCH,"TEST prije brisanja: " + String.valueOf(sharedPreferences.contains("Avaz")));
 //            for (Map.Entry<String, ?> entry : sharedPreferencesAll.entrySet()) {
 //
@@ -133,7 +129,7 @@ public class LaunchActivity extends Activity {
 //
 //                editor.remove(entry.getKey());
 //            }
-            editor.clear().apply();
+//            editor.clear().apply();
             Log.i(LOG_LAUNCH,"TEST nakon brisanja: " + String.valueOf(sharedPreferences.contains("Avaz")));
 
 
@@ -154,7 +150,7 @@ public class LaunchActivity extends Activity {
             //parse JSON data
             try {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                Log.i(LOG_LAUNCH,"Sources: " + sourcesList);
+//                Log.i(LOG_LAUNCH,"Sources: " + sourcesList);
                 JSONObject jsonObject = null;
                 JSONArray jsonArray = null;
 
@@ -164,13 +160,12 @@ public class LaunchActivity extends Activity {
                     JSONObject jobj = jsonArray.getJSONObject(j);
 
                     editor.putString(jobj.getString("title"), jobj.getString("logo"));
-                    Log.i(LOG_LAUNCH,"Title: " + jobj.getString("title"));
-                    Log.i(LOG_LAUNCH,"Logo: " + jobj.getString("logo"));
+//                    Log.i(LOG_LAUNCH,"Title: " + jobj.getString("title"));
+//                    Log.i(LOG_LAUNCH,"Logo: " + jobj.getString("logo"));
                 }
                 editor.apply();
 
                 Log.i(LOG_LAUNCH,"TEST nakon try: " + String.valueOf(sharedPreferences.contains("Avaz")));
-
 
 
 //                JSONArray jArray = new JSONArray(result);
