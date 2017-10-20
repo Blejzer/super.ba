@@ -16,16 +16,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import info.bdslab.android.asuper.Library.OAuth2Client;
@@ -35,10 +30,10 @@ import info.bdslab.android.asuper.Utils.Utils;
 
 public class LaunchActivity extends Activity {
 
-    private final String LOG_LAUNCH = "LaunchActivity log";
+    private final String TAG = "LaunchActivity log";
 
     //prefs
-    SharedPreferences prefs;
+    SharedPreferences prefs = null;
 
     // Process handler
     Handler mHandler = new Handler();
@@ -67,7 +62,7 @@ public class LaunchActivity extends Activity {
             mHandler.postDelayed(new Runnable() {
                 public void run() {
                     Intent i = new Intent(LaunchActivity.this, MainActivity.class);
-                    Log.e(LOG_LAUNCH, "Zavrsavamo Launch, pokrecem Main!");
+                    Log.e(TAG, "Zavrsavamo Launch, pokrecem Main!");
                     finish();
                     startActivity(i);
                 }
@@ -83,6 +78,16 @@ public class LaunchActivity extends Activity {
 
     }
 
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//
+//        if (prefs.getBoolean("firstrun", true)) {
+//            // Do first run stuff here then set 'firstrun' as false
+//            // using the following line to edit/commit prefs
+//            prefs.edit().putBoolean("firstrun", false).commit();
+//        }
+//    }
 
     class MyAsyncTask extends AsyncTask<String, String, Void> {
 
@@ -94,18 +99,6 @@ public class LaunchActivity extends Activity {
         protected Void doInBackground(String... strings) {
 
             Config config = new Config();
-
-            // grant_type=password&
-//            String client_id = "5952144f7e664a87a18c158b_2fpcotn1f8n4so8oo8s4gwg8ogsgk8g48oksc044s0o4k0kow0";
-//            String client_secret = "34vrb64rxx8g8kc8s4ck8s4wocc4kcgkws4cookcocog0k8gcw";
-//            String username = "iOSApp@super.ba";
-//            String password= "thereisnopass";
-//
-//            String site = "https://super.ba/";
-//            String pathToken = "oauth/v2/token?";
-//            String pathApiVersion = "api";
-//            String pathArticles = "api/v1/articles";
-//            String pathSources = "api/v1/sources";
 
             OAuth2Client oAuth2Client = new OAuth2Client(config.getUSERNAME(), config.getPASSWORD(), config.getCLIENT_ID(), config.getCLIENT_SECRET(), config.getSITE()+config.getPATHTOKEN());
 
@@ -122,15 +115,15 @@ public class LaunchActivity extends Activity {
 //            Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
 
 //            SharedPreferences.Editor editor = sharedPreferences.edit();
-//            Log.i(LOG_LAUNCH,"TEST prije brisanja: " + String.valueOf(sharedPreferences.contains("Avaz")));
+//            Log.i(TAG,"TEST prije brisanja: " + String.valueOf(sharedPreferences.contains("Avaz")));
 //            for (Map.Entry<String, ?> entry : sharedPreferencesAll.entrySet()) {
 //
-//                Log.d(LOG_LAUNCH,"map values" + entry.getKey() + ": " + entry.getValue().toString());
+//                Log.d(TAG,"map values" + entry.getKey() + ": " + entry.getValue().toString());
 //
 //                editor.remove(entry.getKey());
 //            }
 //            editor.clear().apply();
-            Log.i(LOG_LAUNCH,"TEST nakon brisanja: " + String.valueOf(sharedPreferences.contains("Avaz")));
+//            Log.i(TAG,"TEST nakon brisanja: " + String.valueOf(sharedPreferences.contains("Avaz")));
 
 
             return null;
@@ -150,7 +143,7 @@ public class LaunchActivity extends Activity {
             //parse JSON data
             try {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-//                Log.i(LOG_LAUNCH,"Sources: " + sourcesList);
+                Log.i(TAG,"Sources: " + sourcesList);
                 JSONObject jsonObject = null;
                 JSONArray jsonArray = null;
 
@@ -160,12 +153,12 @@ public class LaunchActivity extends Activity {
                     JSONObject jobj = jsonArray.getJSONObject(j);
 
                     editor.putString(jobj.getString("title"), jobj.getString("logo"));
-//                    Log.i(LOG_LAUNCH,"Title: " + jobj.getString("title"));
-//                    Log.i(LOG_LAUNCH,"Logo: " + jobj.getString("logo"));
+//                    Log.i(TAG,"Title: " + jobj.getString("title"));
+//                    Log.i(TAG,"Logo: " + jobj.getString("logo"));
                 }
                 editor.apply();
 
-                Log.i(LOG_LAUNCH,"TEST nakon try: " + String.valueOf(sharedPreferences.contains("Avaz")));
+                Log.i(TAG,"TEST nakon try: " + String.valueOf(sharedPreferences.contains("Avaz")));
 
 
 //                JSONArray jArray = new JSONArray(result);

@@ -56,7 +56,7 @@ public class NewsRowAdapter extends ArrayAdapter<Article> {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
 
-            Log.e(TAG, "inside getView method:" + position);
+//            Log.e(TAG, "inside getView method:" + position);
 
             Article objBean;
             View view = convertView;
@@ -77,7 +77,7 @@ public class NewsRowAdapter extends ArrayAdapter<Article> {
             }
 
             objBean = articles.get(position);
-            Log.e(TAG, String.valueOf(position) + ": " + articles.get(position).getImage());
+//            Log.e(TAG, String.valueOf(position) + ": " + articles.get(position).getImage());
 
             holder.tvTitle = (TextView) view.findViewById(R.id.tvtitle);
 //            holder.tvDescription = (TextView) view.findViewById(R.id.tvdescription);

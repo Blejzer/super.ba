@@ -45,13 +45,12 @@ import info.bdslab.android.asuper.Utils.NewsRowAdapter;
 import info.bdslab.android.asuper.Utils.Utils;
 
 public class MainActivity extends AppCompatActivity {
+
     private final String LOG_MAIN = "MainActivity log: ";
-
-
-    private static final String IMAGE_PATTERN = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
 
     Pattern pattern = Pattern.compile(IMAGE_PATTERN);
     Matcher matcher;
+    private static final String IMAGE_PATTERN = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
 
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
@@ -60,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
     private String mActivityTitle;
     SharedPreferences sharedPreferences;
     List<Article> arrayOfList = new ArrayList<>();
-    ListView listView;
 
 
     EditText emailText;
@@ -284,6 +282,9 @@ public class MainActivity extends AppCompatActivity {
         } // protected void onPostExecute(Void v)
 
     } //class MyAsyncTask extends AsyncTask<String, String, Void>
+
+
+
 
 
     public boolean testWiFi() {
