@@ -1,0 +1,27 @@
+﻿client api oauth:
+
+oauth2 = OAuth2ClientCredentials(settings: [
+        "client_id": "5952144f7e664a87a18c158b_2fpcotn1f8n4so8oo8s4gwg8ogsgk8g48oksc044s0o4k0kow0",
+        "client_secret": "34vrb64rxx8g8kc8s4ck8s4wocc4kcgkws4cookcocog0k8gcw",
+        "token_uri": "https://super.ba/oauth/v2/token",
+        "scope": "user",
+        "secret_in_body": false,
+        "keychain": true,
+        ] as OAuth2JSON)
+
+﻿https://super.ba/api - verzija apija
+
+﻿/api/v1/articles su clanci
+
+﻿https://super.ba/api/v1/sources su izvori novosti (portali)
+
+﻿let URL = "\(netProtocol)://\(netHost):\(netPort)/api/v1/articles"
+
+        var parameters: Parameters = [
+            "category": "BiH",
+            "offset": self.offset,
+            "limit": 10,
+            "filters": self.filter,
+        ]
+﻿self.filter je base64 encoded array portala (ime portala - string) koje dobijes iz sources
+

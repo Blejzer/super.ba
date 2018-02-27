@@ -26,7 +26,9 @@
             android:exported="false" />
         <service
             android:name=".Services.OAuth2IntentService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity android:name=".Main2Activity"></activity>
     </application>
 
 </manifest>

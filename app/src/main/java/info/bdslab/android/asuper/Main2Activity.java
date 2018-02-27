@@ -1,6 +1,5 @@
 package info.bdslab.android.asuper;
 
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -8,13 +7,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -42,12 +42,12 @@ import info.bdslab.android.asuper.Library.Token;
 import info.bdslab.android.asuper.POJO.Article;
 import info.bdslab.android.asuper.Services.OAuth2IntentServiceReceiver;
 import info.bdslab.android.asuper.Utils.Config;
-import info.bdslab.android.asuper.Utils.NewsRowAdapter;
+import info.bdslab.android.asuper.Utils.EndlessRecyclerViewScrollListener;
 import info.bdslab.android.asuper.Utils.Utils;
 
-public class MainActivity extends AppCompatActivity {
+public class Main2Activity extends AppCompatActivity {
 
-    private final String LOG_MAIN = "MainActivity log";
+    private final String LOG_MAIN = "MainActivity log: ";
 
     Pattern pattern = Pattern.compile(IMAGE_PATTERN);
     Matcher matcher;
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     EditText emailText;
-    ListView responseView;
+//    ListView responseView;
     ProgressBar progressBar;
 
     // Process handler
@@ -72,13 +72,15 @@ public class MainActivity extends AppCompatActivity {
     String articlesList;
     private OAuth2IntentServiceReceiver mReceiver;
 
+    // Store a member variable for the listener
+    private EndlessRecyclerViewScrollListener scrollListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Configure the RecyclerView
         super.onCreate(savedInstanceState);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        setContentView(R.layout.activity_main);
 
         mDrawerList = (ListView)findViewById(R.id.navList);
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
@@ -90,28 +92,32 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        responseView = (ListView) findViewById(R.id.responseView);
 
-
-        if(testWiFi()){
-
-            mHandler.postDelayed(new Runnable() {
-                public void run() {
-                    new MyAsyncTask().execute();
-
-                }
-            }, 2100);
-
-        }else{
-                //TODO create warning activity for testing internet connection
-                buildAlertMessageNoWiFi();
-                setResult(RESULT_CANCELED, returnIntent);
-                finish();
+        RecyclerView rvItems = (RecyclerView) findViewById(R.id.rvArticles);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        rvItems.setLayoutManager(linearLayoutManager);
+        // Retain an instance so that you can call `resetState()` for fresh searches
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                loadNextDataFromApi(page);
             }
-
+        };
+        // Adds the scroll listener to RecyclerView
+        rvItems.addOnScrollListener(scrollListener);
     }
 
-
+    // Append the next page of data into the adapter
+    // This method probably sends out a network request and appends new data items to your adapter.
+    public void loadNextDataFromApi(int offset) {
+        // Send an API request to retrieve appropriate paginated data
+        //  --> Send the request including an offset value (i.e `page`) as a query parameter.
+        //  --> Deserialize and construct new model objects from the API response
+        //  --> Append the new data objects to the existing set of items inside the array of items
+        //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
+    }
 
     private void addDrawerItems() {
 //        String[] osArray = new String[]{};
@@ -131,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this, "Time for an upgrade!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Main2Activity.this, "Time for an upgrade!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -199,10 +205,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     class MyAsyncTask extends AsyncTask<String, String, Void> {
 
-        private ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        private ProgressDialog progressDialog = new ProgressDialog(Main2Activity.this);
 
         String articlesList;
 
@@ -216,9 +221,8 @@ public class MainActivity extends AppCompatActivity {
             Token token = oAuth2Client.getAccessToken();
 
             oAuth2Client.setSite(config.getSITE());
-            String test = config.getPATHARTICLES();
 
-            articlesList = token.getResource(oAuth2Client, token, test);
+            articlesList = token.getResource(oAuth2Client, token, config.getPATHARTICLES());
 
 
             return null;
@@ -230,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
             progressDialog.show();
             progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 public void onCancel(DialogInterface arg0) {
-                    MyAsyncTask.this.cancel(true);
+                    Main2Activity.MyAsyncTask.this.cancel(true);
                 }
             });
         }
@@ -239,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
             //parse JSON data
             try {
 
-//                Log.i(LOG_MAIN, "Articles: " + articlesList);
+                Log.i(LOG_MAIN, "Articles: " + articlesList);
 
                 JSONObject jsonArticle = null;
                 JSONObject jsonSource = null;
@@ -271,9 +275,9 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
-                Log.e(LOG_MAIN, "Broj elemenata: "+arrayOfList.size());
+//                Log.e(LOG_MAIN, "Broj elemenata: "+arrayOfList.size());
 
-                setAdapterToListview();
+//                setAdapterToListview();
 
 
 
@@ -291,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean testWiFi() {
 
-        if (Utils.isNetworkAvailable(MainActivity.this) && Utils.isOnline()) {
+        if (Utils.isNetworkAvailable(Main2Activity.this) && Utils.isOnline()) {
             return true;
         } else {
             return false;
@@ -300,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void buildAlertMessageNoWiFi() {
-        LayoutInflater li = LayoutInflater.from(MainActivity.this);
+        LayoutInflater li = LayoutInflater.from(Main2Activity.this);
         View promptsView = li.inflate(R.layout.konekcija, null);
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setView(promptsView);
@@ -315,19 +319,4 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.setIcon(R.drawable.ic_launcher);
         alertDialog.show();
     }
-
-    public void setAdapterToListview() {
-        NewsRowAdapter objAdapter = new NewsRowAdapter(MainActivity.this,
-                R.layout.row, arrayOfList);
-        responseView.setAdapter(objAdapter);
-    }
-
-    public void showToast(String msg) {
-
-    }
-
-
-
-
-
 }
