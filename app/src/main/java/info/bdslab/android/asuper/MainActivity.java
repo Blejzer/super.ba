@@ -10,7 +10,6 @@ import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private String mActivityTitle;
     SharedPreferences sharedPreferences;
     List<Article> arrayOfList = new ArrayList<>();
+    int page = 0;
 
 
     EditText emailText;
@@ -91,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
         responseView = (ListView) findViewById(R.id.responseView);
+
+        responseView.setOnScrollListener(onScrollListener());
 
 
         if(testWiFi()){
@@ -216,7 +219,8 @@ public class MainActivity extends AppCompatActivity {
             Token token = oAuth2Client.getAccessToken();
 
             oAuth2Client.setSite(config.getSITE());
-            String test = config.getPATHARTICLES();
+            String test = config.getPATHARTICLES() + config.getOFFSET()+String.valueOf(page*10);
+            Log.w("test string", test);
 
             articlesList = token.getResource(oAuth2Client, token, test);
 
@@ -270,9 +274,7 @@ public class MainActivity extends AppCompatActivity {
                     arrayOfList.add(article);
 
                 }
-
-                Log.e(LOG_MAIN, "Broj elemenata: "+arrayOfList.size());
-
+                page++;
                 setAdapterToListview();
 
 
@@ -320,6 +322,8 @@ public class MainActivity extends AppCompatActivity {
         NewsRowAdapter objAdapter = new NewsRowAdapter(MainActivity.this,
                 R.layout.row, arrayOfList);
         responseView.setAdapter(objAdapter);
+        Log.e(LOG_MAIN, "Broj elemenata: "+arrayOfList.size());
+        responseView.setSelection(arrayOfList.size() - 11);
     }
 
     public void showToast(String msg) {
@@ -327,7 +331,47 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private AbsListView.OnScrollListener onScrollListener() {
+        return new AbsListView.OnScrollListener() {
 
+
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                Log.w(LOG_MAIN, "onScrollStateChanged activated");
+                int threshold = 1;
+                int count = responseView.getCount();
+                Log.w(LOG_MAIN, "lastPosition="+responseView.getLastVisiblePosition()+" scrollState="+scrollState+" count="+count);
+                if (scrollState == SCROLL_STATE_IDLE) {
+                    if (responseView.getLastVisiblePosition() >= count - threshold) {
+                        Log.i(LOG_MAIN, "loading more data");
+                        // Execute LoadMoreDataTask AsyncTask
+                        if(testWiFi()){
+
+                            mHandler.postDelayed(new Runnable() {
+                                public void run() {
+                                    new MyAsyncTask().execute();
+
+                                }
+                            }, 1100);
+
+                        }else{
+                            //TODO create warning activity for testing internet connection
+                            buildAlertMessageNoWiFi();
+                            setResult(RESULT_CANCELED, returnIntent);
+                            finish();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                                 int totalItemCount) {
+            }
+
+        };
+    }
 
 
 }

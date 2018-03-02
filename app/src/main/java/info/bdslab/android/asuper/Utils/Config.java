@@ -15,6 +15,11 @@ public class Config {
     String PATHAPIVERSION = "api";
     String PATHARTICLES = "api/v1/articles";
     String PATHSOURCES = "api/v1/sources";
+    String CATEGORY = "?category=BiH";
+    String OFFSET = "?offset=";
+    String LIMIT = "?limit=10";
+    String FILTERS = "?filters=";
+
 
     public String getCLIENT_ID() {
         return CLIENT_ID;
@@ -50,6 +55,22 @@ public class Config {
 
     public String getPATHSOURCES() {
         return PATHSOURCES;
+    }
+
+    public String getCATEGORY() {
+        return CATEGORY;
+    }
+
+    public String getOFFSET() {
+        return OFFSET;
+    }
+
+    public String getLIMIT() {
+        return LIMIT;
+    }
+
+    public String getFILTERS() {
+        return FILTERS;
     }
 }
 

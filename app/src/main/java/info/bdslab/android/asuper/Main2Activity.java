@@ -13,8 +13,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,6 +41,8 @@ import info.bdslab.android.asuper.POJO.Article;
 import info.bdslab.android.asuper.Services.OAuth2IntentServiceReceiver;
 import info.bdslab.android.asuper.Utils.Config;
 import info.bdslab.android.asuper.Utils.EndlessRecyclerViewScrollListener;
+import info.bdslab.android.asuper.Utils.EndlessScrollListener;
+import info.bdslab.android.asuper.Utils.NewsRowAdapter;
 import info.bdslab.android.asuper.Utils.Utils;
 
 public class Main2Activity extends AppCompatActivity {
@@ -60,16 +60,17 @@ public class Main2Activity extends AppCompatActivity {
     private String mActivityTitle;
     SharedPreferences sharedPreferences;
     List<Article> arrayOfList = new ArrayList<>();
+    int page = 0;
 
 
     EditText emailText;
-//    ListView responseView;
+    ListView responseView2;
     ProgressBar progressBar;
 
     // Process handler
     Handler mHandler = new Handler();
     Intent returnIntent = new Intent();
-    String articlesList;
+    String articlesList = "";
     private OAuth2IntentServiceReceiver mReceiver;
 
     // Store a member variable for the listener
@@ -93,20 +94,16 @@ public class Main2Activity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
 
-        RecyclerView rvItems = (RecyclerView) findViewById(R.id.rvArticles);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        rvItems.setLayoutManager(linearLayoutManager);
-        // Retain an instance so that you can call `resetState()` for fresh searches
-        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+        responseView2.setOnScrollListener(new EndlessScrollListener() {
             @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+            public boolean onLoadMore(int page, int totalItemsCount) {
                 // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to the bottom of the list
+                // Add whatever code is needed to append new items to your AdapterView
                 loadNextDataFromApi(page);
+                // or loadNextDataFromApi(totalItemsCount);
+                return true; // ONLY if more data is actually being loaded; false otherwise.
             }
-        };
-        // Adds the scroll listener to RecyclerView
-        rvItems.addOnScrollListener(scrollListener);
+        });
     }
 
     // Append the next page of data into the adapter
@@ -117,6 +114,22 @@ public class Main2Activity extends AppCompatActivity {
         //  --> Deserialize and construct new model objects from the API response
         //  --> Append the new data objects to the existing set of items inside the array of items
         //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
+
+        if(testWiFi()){
+
+            mHandler.postDelayed(new Runnable() {
+                public void run() {
+                    new Main2Activity.MyAsyncTask().execute();
+
+                }
+            }, 2100);
+
+        }else{
+            // create warning activity for testing internet connection
+            buildAlertMessageNoWiFi();
+            setResult(RESULT_CANCELED, returnIntent);
+            finish();
+        }
     }
 
     private void addDrawerItems() {
@@ -209,7 +222,7 @@ public class Main2Activity extends AppCompatActivity {
 
         private ProgressDialog progressDialog = new ProgressDialog(Main2Activity.this);
 
-        String articlesList;
+
 
         @Override
         protected Void doInBackground(String... strings) {
@@ -222,7 +235,9 @@ public class Main2Activity extends AppCompatActivity {
 
             oAuth2Client.setSite(config.getSITE());
 
-            articlesList = token.getResource(oAuth2Client, token, config.getPATHARTICLES());
+            String test = config.getPATHARTICLES() + config.getOFFSET()+String.valueOf(page*10);
+
+            articlesList = token.getResource(oAuth2Client, token, test);
 
 
             return null;
@@ -318,5 +333,16 @@ public class Main2Activity extends AppCompatActivity {
 
         alertDialog.setIcon(R.drawable.ic_launcher);
         alertDialog.show();
+    }
+
+
+    public void setAdapterToListview() {
+        NewsRowAdapter objAdapter = new NewsRowAdapter(Main2Activity.this,
+                R.layout.row, arrayOfList);
+        responseView2.setAdapter(objAdapter);
+    }
+
+    public void showToast(String msg) {
+
     }
 }
