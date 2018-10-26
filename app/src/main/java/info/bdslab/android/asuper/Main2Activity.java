@@ -31,13 +31,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import info.bdslab.android.asuper.Library.OAuth2Client;
+//import info.bdslab.android.asuper.Library.OAuth2Client;
+//import info.bdslab.android.asuper.Library.Token;
+import ca.mimic.oauth2library.OAuth2Client;
+import ca.mimic.oauth2library.OAuthError;
+import ca.mimic.oauth2library.OAuthResponse;
 import info.bdslab.android.asuper.Library.Token;
 import info.bdslab.android.asuper.POJO.Article;
 import info.bdslab.android.asuper.Services.OAuth2IntentServiceReceiver;
@@ -216,13 +221,25 @@ public class Main2Activity extends AppCompatActivity {
 
             Config config = new Config();
 
-            OAuth2Client oAuth2Client = new OAuth2Client(config.getUSERNAME(), config.getPASSWORD(), config.getCLIENT_ID(), config.getCLIENT_SECRET(), config.getSITE()+config.getPATHTOKEN());
+            OAuth2Client client = new OAuth2Client.Builder(config.getUSERNAME(), config.getPASSWORD(), config.getCLIENT_ID(), config.getCLIENT_SECRET(), config.getSITE()+config.getPATHTOKEN()).build();
+            OAuthResponse response = null;
+            try {
+                response = client.requestAccessToken();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-            Token token = oAuth2Client.getAccessToken();
+            if (response.isSuccessful()) {
+                Token token = new Token(response.getExpiresIn(), response.getTokenType(), response.getRefreshToken(), response.getAccessToken());
+//                String accessToken = response.getAccessToken();
+//                String refreshToken = response.getRefreshToken();
+//                articlesList = token.getResource(oAuth2Client, token, config.getPATHARTICLES());
+            } else {
+                OAuthError error = response.getOAuthError();
+                String errorMsg = error.getError();
+            }
 
-            oAuth2Client.setSite(config.getSITE());
 
-            articlesList = token.getResource(oAuth2Client, token, config.getPATHARTICLES());
 
 
             return null;

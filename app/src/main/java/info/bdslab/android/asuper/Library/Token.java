@@ -2,6 +2,8 @@ package info.bdslab.android.asuper.Library;
 
 import java.io.Serializable;
 
+import ca.mimic.oauth2library.OAuth2Client;
+
 /**
  * Created by nikola on 27/09/2017.
  */
@@ -52,13 +54,13 @@ public class Token implements Serializable {
         return (System.currentTimeMillis() >= this.getExpiresAt()) ? true : false;
     }
 
-    public String getResource(OAuth2Client client, Token token, String path) {
-        return OAuthUtils.getProtectedResource(client, token, path);
-    }
-
-    public Token refresh(OAuth2Client client) {
-        OAuth2Config oauthConfig = new OAuth2Config.OAuth2ConfigBuilder(client.getUsername(), client.getPassword(), client.getClientId(), client.getClientSecret(), client.getSite())
-                .grantType("refresh_token").build();
-        return OAuthUtils.refreshAccessToken(this, oauthConfig);
-    }
+//    public String getResource(OAuth2Client client, Token token, String path) {
+//        return OAuthUtils.getProtectedResource(client, token, path);
+//    }
+//
+//    public Token refresh(OAuth2Client client) {
+//        OAuth2Config oauthConfig = new OAuth2Config.OAuth2ConfigBuilder(client.getUsername(), client.getPassword(), client.getClientId(), client.getClientSecret(), client.getSite())
+//                .grantType("refresh_token").build();
+//        return OAuthUtils.refreshAccessToken(this, oauthConfig);
+//    }
 }

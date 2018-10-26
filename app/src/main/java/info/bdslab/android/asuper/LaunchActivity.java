@@ -21,9 +21,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Map;
 
-import info.bdslab.android.asuper.Library.OAuth2Client;
+import ca.mimic.oauth2library.OAuth2Client;
+import ca.mimic.oauth2library.OAuthError;
+import ca.mimic.oauth2library.OAuthResponse;
+//import info.bdslab.android.asuper.Library.Token;
 import info.bdslab.android.asuper.Library.Token;
 import info.bdslab.android.asuper.Utils.Config;
 import info.bdslab.android.asuper.Utils.Utils;
@@ -100,13 +104,36 @@ public class LaunchActivity extends Activity {
 
             Config config = new Config();
 
-            OAuth2Client oAuth2Client = new OAuth2Client(config.getUSERNAME(), config.getPASSWORD(), config.getCLIENT_ID(), config.getCLIENT_SECRET(), config.getSITE()+config.getPATHTOKEN());
+            OAuth2Client client = new OAuth2Client.Builder(config.getUSERNAME(), config.getPASSWORD(), config.getCLIENT_ID(), config.getCLIENT_SECRET(), config.getSITE()+config.getPATHTOKEN()).build();
+            OAuthResponse response = null;
+            try {
 
-            Token token = oAuth2Client.getAccessToken();
+                response = client.requestAccessToken();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-            oAuth2Client.setSite(config.getSITE());
+            if (response.isSuccessful()) {
+                Token token = new Token(response.getExpiresIn(), response.getTokenType(), response.getRefreshToken(), response.getAccessToken());
+//                String accessToken = response.getAccessToken();
+//                String refreshToken = response.getRefreshToken();
+            } else {
+                OAuthError error = response.getOAuthError();
+                String errorMsg = error.getError();
+                Log.i("ERROR IN OAUTH", errorMsg);
+            }
 
-            sourcesList = token.getResource(oAuth2Client, token, config.getPATHSOURCES());
+            Log.i("Response", response.getAccessToken());
+            Log.i("Response", response.getBody());
+            Log.i("Response", response.getScope());
+
+//            OAuth2Client oAuth2Client = new OAuth2Client(config.getUSERNAME(), config.getPASSWORD(), config.getCLIENT_ID(), config.getCLIENT_SECRET(), config.getSITE()+config.getPATHTOKEN());
+//
+//            Token token = oAuth2Client.getAccessToken();
+//
+//            oAuth2Client.setSite(config.getSITE());
+
+//            sourcesList = token.getResource(oAuth2Client, token, config.getPATHSOURCES());
 
             PreferenceManager.setDefaultValues(LaunchActivity.this, R.xml.sources, false);
             sharedPreferences = android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(LaunchActivity.this);

@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.Context;
 import android.util.Log;
 
-import info.bdslab.android.asuper.Library.OAuth2Client;
+//import info.bdslab.android.asuper.Library.OAuth2Client;
 import info.bdslab.android.asuper.Library.Token;
 import info.bdslab.android.asuper.Utils.Config;
 
@@ -28,7 +28,7 @@ public class OAuth2IntentService extends IntentService {
     private static final String ACTION_REFRESH = "refresh";
     Config config = new Config();
     Token token;
-    OAuth2Client oAuth2Client;
+//    OAuth2Client oAuth2Client;
 
     // TODO: Rename parameters
 //    private static final String EXTRA_PARAM1 = "info.bdslab.android.asuper.extra.PARAM1";
@@ -91,11 +91,11 @@ public class OAuth2IntentService extends IntentService {
      */
     private void handleActionNew() {
         // TODO: Handle action New
-        oAuth2Client = new OAuth2Client(config.getUSERNAME(), config.getPASSWORD(), config.getCLIENT_ID(), config.getCLIENT_SECRET(), config.getSITE()+config.getPATHTOKEN());
-
-        token = oAuth2Client.getAccessToken();
-
-        oAuth2Client.setSite(config.getSITE());
+//        oAuth2Client = new OAuth2Client(config.getUSERNAME(), config.getPASSWORD(), config.getCLIENT_ID(), config.getCLIENT_SECRET(), config.getSITE()+config.getPATHTOKEN());
+//
+//        token = oAuth2Client.getAccessToken();
+//
+//        oAuth2Client.setSite(config.getSITE());
 //        throw new UnsupportedOperationException("Not yet implemented");
     }
 
@@ -106,7 +106,7 @@ public class OAuth2IntentService extends IntentService {
     private void handleActionRefresh(Token oldToken) {
         // TODO: Handle action Refresh
         if(oldToken.isExpired()){
-            token = oldToken.refresh(oAuth2Client);
+//            token = oldToken.refresh(oAuth2Client);
         }
 //        throw new UnsupportedOperationException("Not yet implemented");
     }

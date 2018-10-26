@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import info.bdslab.android.asuper.Library.OAuth2Client;
+//import info.bdslab.android.asuper.Library.OAuth2Client;
 import info.bdslab.android.asuper.Library.Token;
 import info.bdslab.android.asuper.POJO.Article;
 import info.bdslab.android.asuper.Services.OAuth2IntentServiceReceiver;
@@ -211,14 +211,14 @@ public class MainActivity extends AppCompatActivity {
 
             Config config = new Config();
 
-            OAuth2Client oAuth2Client = new OAuth2Client(config.getUSERNAME(), config.getPASSWORD(), config.getCLIENT_ID(), config.getCLIENT_SECRET(), config.getSITE()+config.getPATHTOKEN());
-
-            Token token = oAuth2Client.getAccessToken();
-
-            oAuth2Client.setSite(config.getSITE());
-            String test = config.getPATHARTICLES();
-
-            articlesList = token.getResource(oAuth2Client, token, test);
+//            OAuth2Client oAuth2Client = new OAuth2Client(config.getUSERNAME(), config.getPASSWORD(), config.getCLIENT_ID(), config.getCLIENT_SECRET(), config.getSITE()+config.getPATHTOKEN());
+//
+//            Token token = oAuth2Client.getAccessToken();
+//
+//            oAuth2Client.setSite(config.getSITE());
+//            String test = config.getPATHARTICLES();
+//
+//            articlesList = token.getResource(oAuth2Client, token, test);
 
 
             return null;
