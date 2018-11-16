@@ -123,9 +123,9 @@ public class LaunchActivity extends Activity {
                 Log.i("ERROR IN OAUTH", errorMsg);
             }
 
-            Log.i("Response", response.getAccessToken());
-            Log.i("Response", response.getBody());
-            Log.i("Response", response.getScope());
+            Log.i("getAccessToken()", response.getAccessToken());
+            Log.i("getBody()", response.getBody());
+            Log.i("getScope()", response.getScope());
 
 //            OAuth2Client oAuth2Client = new OAuth2Client(config.getUSERNAME(), config.getPASSWORD(), config.getCLIENT_ID(), config.getCLIENT_SECRET(), config.getSITE()+config.getPATHTOKEN());
 //
