@@ -130,6 +130,7 @@ public class LaunchActivity extends Activity {
         } // protected Void doInBackground(String... params)
 
         protected void onPreExecute() {
+
 //            progressDialog.setMessage("Downloading your data...");
 //            progressDialog.show();
 //            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
