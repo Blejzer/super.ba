@@ -38,6 +38,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import android.util.Base64;
+import android.util.Log;
 
 public class OAuthUtils {
 

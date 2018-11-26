@@ -7,6 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.PaintDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,7 +35,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -61,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     List<Article> arrayOfList = new ArrayList<>();
     int page = 0;
+
+    private String [] filteri = {};
 
 
     EditText emailText;
@@ -106,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
             }, 2100);
 
         }else{
-                //TODO create warning activity for testing internet connection
                 buildAlertMessageNoWiFi();
                 setResult(RESULT_CANCELED, returnIntent);
                 finish();
@@ -134,7 +142,9 @@ public class MainActivity extends AppCompatActivity {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this, "Time for an upgrade!", Toast.LENGTH_SHORT).show();
+
+                view.setBackgroundColor(Color.GRAY);
+
             }
         });
     }
@@ -219,9 +229,17 @@ public class MainActivity extends AppCompatActivity {
             Token token = oAuth2Client.getAccessToken();
 
             oAuth2Client.setSite(config.getSITE());
-            String test = config.getPATHARTICLES() + config.getOFFSET()+String.valueOf(page*10);
-            Log.w("test string", test);
 
+
+
+            JSONArray jsonArray = new JSONArray(Arrays.asList(filteri));
+
+            Log.w("jsonArray string", jsonArray.toString()+";");
+            byte [] data = jsonArray.toString().getBytes(Charset.forName("UTF-8"));
+            String base64 = Base64.encodeToString(data, Base64.NO_WRAP);
+            String test = config.getPATHARTICLES() + config.getOFFSET()+String.valueOf(page*10) + config.getFILTERS()+base64;
+            Log.w("base64 string", base64);
+            Log.w("test string", test);
             articlesList = token.getResource(oAuth2Client, token, test);
 
 
@@ -230,13 +248,13 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPreExecute() {
 
-            progressDialog.setMessage("Downloading latest news...");
-            progressDialog.show();
-            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                public void onCancel(DialogInterface arg0) {
-                    MyAsyncTask.this.cancel(true);
-                }
-            });
+//            progressDialog.setMessage("Downloading latest news...");
+//            progressDialog.show();
+//            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//                public void onCancel(DialogInterface arg0) {
+//                    MyAsyncTask.this.cancel(true);
+//                }
+//            });
         }
 
         protected void onPostExecute(Void v) {
@@ -323,7 +341,12 @@ public class MainActivity extends AppCompatActivity {
                 R.layout.row, arrayOfList);
         responseView.setAdapter(objAdapter);
         Log.e(LOG_MAIN, "Broj elemenata: "+arrayOfList.size());
-        responseView.setSelection(arrayOfList.size() - 11);
+        if (arrayOfList.size()<11){
+            responseView.setSelection(arrayOfList.size()-11);
+        }else{
+            responseView.setSelection(arrayOfList.size() - 16);
+        }
+
     }
 
     public void showToast(String msg) {
@@ -339,7 +362,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 Log.w(LOG_MAIN, "onScrollStateChanged activated");
-                int threshold = 1;
+                int threshold = 2;
                 int count = responseView.getCount();
                 Log.w(LOG_MAIN, "lastPosition="+responseView.getLastVisiblePosition()+" scrollState="+scrollState+" count="+count);
                 if (scrollState == SCROLL_STATE_IDLE) {

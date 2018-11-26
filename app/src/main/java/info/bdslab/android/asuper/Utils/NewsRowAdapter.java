@@ -113,8 +113,12 @@ public class NewsRowAdapter extends ArrayAdapter<Article> {
                         imageLoader.init(ImageLoaderConfiguration
                                 .createDefault(activity));
                     }
-                    if(!objBean.getImage().endsWith("jpg") && !objBean.getImage().endsWith("png") && objBean.getImage().endsWith("bmp")){
+
+                    if(!objBean.getImage().endsWith("jpg") && !objBean.getImage().endsWith("png") && objBean.getImage().endsWith("bmp") && objBean.getImage().contains("?")){
+
+                        Log.i("Image: ", objBean.getImage().substring(0,objBean.getImage().indexOf("?")));
                         objBean.setImage(objBean.getImage().substring(0,objBean.getImage().indexOf("?")));
+
                     }
                     imageLoader.displayImage(objBean.getImage(), holder.imgView,
                             options, new ImageLoadingListener() {

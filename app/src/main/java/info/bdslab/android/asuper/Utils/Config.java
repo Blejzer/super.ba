@@ -18,7 +18,7 @@ public class Config {
     String CATEGORY = "?category=BiH";
     String OFFSET = "?offset=";
     String LIMIT = "?limit=10";
-    String FILTERS = "?filters=";
+    String FILTERS = "&filters=";
 
 
     public String getCLIENT_ID() {
