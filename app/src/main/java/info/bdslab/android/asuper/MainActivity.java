@@ -143,7 +143,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                view.setBackgroundColor(Color.GRAY);
+                ColorDrawable buttonColor = (ColorDrawable) view.getBackground();
+                int colorId = 0;
+                try{
+                    colorId = buttonColor.getColor();
+                }
+                catch (NullPointerException e){
+                    e.printStackTrace();
+                }
+                if (colorId == 0){
+                    colorId = Color.GRAY;
+                }
+                else{
+                    colorId = Color.TRANSPARENT;
+                }
+                Log.w("view color", String.valueOf(colorId));
+                view.setBackgroundColor(colorId);
 
             }
         });
