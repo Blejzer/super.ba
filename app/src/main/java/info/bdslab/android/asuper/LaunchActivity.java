@@ -21,7 +21,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import info.bdslab.android.asuper.Library.OAuth2Client;
 import info.bdslab.android.asuper.Library.Token;
@@ -112,18 +115,19 @@ public class LaunchActivity extends Activity {
             sharedPreferences = android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(LaunchActivity.this);
 
 
-//            Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
+//            HashMap<String, Integer> sharedPreferencesAll = new HashMap<String, Integer>();
+            Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
 
-//            SharedPreferences.Editor editor = sharedPreferences.edit();
-//            Log.i(TAG,"TEST prije brisanja: " + String.valueOf(sharedPreferences.contains("Avaz")));
-//            for (Map.Entry<String, ?> entry : sharedPreferencesAll.entrySet()) {
-//
-//                Log.d(TAG,"map values" + entry.getKey() + ": " + entry.getValue().toString());
-//
-//                editor.remove(entry.getKey());
-//            }
-//            editor.clear().apply();
-//            Log.i(TAG,"TEST nakon brisanja: " + String.valueOf(sharedPreferences.contains("Avaz")));
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            Log.i(TAG,"TEST prije brisanja: " + String.valueOf(sharedPreferences.contains("Avaz")));
+            for (Map.Entry<String, ?> entry : sharedPreferencesAll.entrySet()) {
+
+                Log.d(TAG,"map values" + entry.getKey() + ": " + entry.getValue().toString());
+
+                editor.remove(entry.getKey());
+            }
+            editor.clear().apply();
+            Log.i(TAG,"TEST nakon brisanja: " + String.valueOf(sharedPreferences.contains("Avaz")));
 
 
             return null;
@@ -143,6 +147,13 @@ public class LaunchActivity extends Activity {
         protected void onPostExecute(Void v) {
             //parse JSON data
             try {
+
+                // Get the current list.
+
+
+
+                Set<String> myStrings = new HashSet<>();
+
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 Log.i(TAG,"Sources: " + sourcesList);
                 JSONObject jsonObject = null;
@@ -152,14 +163,15 @@ public class LaunchActivity extends Activity {
                 jsonArray = jsonObject.getJSONArray("sources");
                 for (int j = 0; j < jsonArray.length(); j++) {
                     JSONObject jobj = jsonArray.getJSONObject(j);
+                    myStrings.add(jobj.getString("title"));
 
                     editor.putString(jobj.getString("title"), jobj.getString("logo"));
-//                    Log.i(TAG,"Title: " + jobj.getString("title"));
-//                    Log.i(TAG,"Logo: " + jobj.getString("logo"));
+                    Log.i(TAG,"Title: " + jobj.getString("title"));
+                    Log.i(TAG,"Logo: " + jobj.getString("logo"));
                 }
                 editor.apply();
 
-                Log.i(TAG,"TEST nakon try: " + String.valueOf(sharedPreferences.contains("Avaz")));
+//                Log.i(TAG,"TEST nakon try: " + String.valueOf(sharedPreferences.contains("Avaz")));
 
 
 //                JSONArray jArray = new JSONArray(result);

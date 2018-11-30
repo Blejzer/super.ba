@@ -36,6 +36,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -132,6 +134,11 @@ public class MainActivity extends AppCompatActivity {
             where.add(entry.getKey());
         }
 
+        Log.w("Content of sp", ": ");
+        for (Map.Entry entry : sharedPreferencesAll.entrySet()) {
+            Log.w("SP: ",entry.getKey() + ", " + entry.getValue());
+        }
+
         String[] osArray = new String[ where.size() ];
         where.toArray( osArray );
 
@@ -142,23 +149,18 @@ public class MainActivity extends AppCompatActivity {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                ColorDrawable buttonColor = (ColorDrawable) view.getBackground();
-                int colorId = 0;
-                try{
-                    colorId = buttonColor.getColor();
+                try {
+                    ColorDrawable buttonColor = (ColorDrawable) view.getBackground();
+                    int colorId = buttonColor.getColor();
+                    if (colorId ==Color.TRANSPARENT){
+                        view.setBackgroundColor(Color.GRAY);
+                    }else if (colorId==Color.GRAY){
+                        view.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                }catch (NullPointerException e){
+                    Log.w("Color is NULL", "Null");
+                    view.setBackgroundColor(Color.GRAY);
                 }
-                catch (NullPointerException e){
-                    e.printStackTrace();
-                }
-                if (colorId == 0){
-                    colorId = Color.GRAY;
-                }
-                else{
-                    colorId = Color.TRANSPARENT;
-                }
-                Log.w("view color", String.valueOf(colorId));
-                view.setBackgroundColor(colorId);
 
             }
         });
@@ -245,16 +247,14 @@ public class MainActivity extends AppCompatActivity {
 
             oAuth2Client.setSite(config.getSITE());
 
-
-
             JSONArray jsonArray = new JSONArray(Arrays.asList(filteri));
 
-            Log.w("jsonArray string", jsonArray.toString()+";");
+//            Log.w("jsonArray string", jsonArray.toString()+";");
             byte [] data = jsonArray.toString().getBytes(Charset.forName("UTF-8"));
             String base64 = Base64.encodeToString(data, Base64.NO_WRAP);
             String test = config.getPATHARTICLES() + config.getOFFSET()+String.valueOf(page*10) + config.getFILTERS()+base64;
-            Log.w("base64 string", base64);
-            Log.w("test string", test);
+//            Log.w("base64 string", base64);
+//            Log.w("test string", test);
             articlesList = token.getResource(oAuth2Client, token, test);
 
 
@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
             //parse JSON data
             try {
 
-//                Log.i(LOG_MAIN, "Articles: " + articlesList);
+                Log.i(LOG_MAIN, "Articles: " + articlesList);
 
                 JSONObject jsonArticle = null;
                 JSONObject jsonSource = null;
@@ -314,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
 
                 this.progressDialog.dismiss();
             } catch (JSONException e) {
-                Log.e("JSONException", "Error: " + e.toString());
+                e.printStackTrace();
             } // catch (JSONException e)
         } // protected void onPostExecute(Void v)
 
@@ -409,6 +409,26 @@ public class MainActivity extends AppCompatActivity {
             }
 
         };
+    }
+
+//    if (!exists(article.getImage())){
+//        article.setImage("");
+//    }
+
+    public static boolean exists(String URLName){
+        try {
+            HttpURLConnection.setFollowRedirects(false);
+            // note : you may also need
+            //        HttpURLConnection.setInstanceFollowRedirects(false)
+            HttpURLConnection con =
+                    (HttpURLConnection) new URL(URLName).openConnection();
+            con.setRequestMethod("HEAD");
+            return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 
