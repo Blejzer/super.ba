@@ -77,7 +77,6 @@ public class NewsRowAdapter extends ArrayAdapter<Article> {
             }
 
             objBean = articles.get(position);
-            Log.e(TAG, String.valueOf(position) + " - " + articles.get(position).getImage());
 
             holder.tvTitle = (TextView) view.findViewById(R.id.tvtitle);
 //            holder.tvDescription = (TextView) view.findViewById(R.id.tvdescription);
@@ -119,7 +118,7 @@ public class NewsRowAdapter extends ArrayAdapter<Article> {
 
                     if(!objBean.getImage().endsWith("jpg") && !objBean.getImage().endsWith("png") && objBean.getImage().endsWith("bmp") && objBean.getImage().contains("?")){
 
-                        Log.i(TAG, "Image: "+ objBean.getImage().substring(0,objBean.getImage().indexOf("?")));
+                        Log.d(TAG, "Image: "+ objBean.getImage().substring(0,objBean.getImage().indexOf("?")));
                         objBean.setImage(objBean.getImage().substring(0,objBean.getImage().indexOf("?")));
 
                     }
@@ -160,7 +159,7 @@ public class NewsRowAdapter extends ArrayAdapter<Article> {
                                 .createDefault(activity));
                     }
                     if(!objBean.getLogo().endsWith("jpg") && !objBean.getLogo().endsWith("png") && !objBean.getLogo().endsWith("bmp") && objBean.getImage().contains("?")){
-                        Log.i(TAG, "Image: "+ objBean.getImage().substring(0,objBean.getImage().indexOf("?")));
+                        Log.d(TAG, "Image: "+ objBean.getImage().substring(0,objBean.getImage().indexOf("?")));
                         objBean.setLogo(objBean.getLogo().substring(0,objBean.getLogo().indexOf("?")));
                     }
                     imageLoader.displayImage(objBean.getLogo(), holder.slogoView,

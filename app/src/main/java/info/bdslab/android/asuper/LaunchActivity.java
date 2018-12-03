@@ -21,9 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import info.bdslab.android.asuper.Library.OAuth2Client;
@@ -65,7 +63,7 @@ public class LaunchActivity extends Activity {
             mHandler.postDelayed(new Runnable() {
                 public void run() {
                     Intent i = new Intent(LaunchActivity.this, MainActivity.class);
-                    Log.e(TAG, "Zavrsavamo Launch, pokrecem Main!");
+                    Log.d(TAG, "Zavrsavamo Launch, pokrecem Main!");
                     finish();
                     startActivity(i);
                 }
@@ -116,18 +114,12 @@ public class LaunchActivity extends Activity {
 
 
 //            HashMap<String, Integer> sharedPreferencesAll = new HashMap<String, Integer>();
-            Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
+//            Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
 
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            Log.i(TAG,"TEST prije brisanja: " + String.valueOf(sharedPreferences.contains("Avaz")));
-            for (Map.Entry<String, ?> entry : sharedPreferencesAll.entrySet()) {
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
+//            Log.d(TAG,"TEST prije brisanja: " + String.valueOf(sharedPreferences.contains("Avaz")));
 
-                Log.d(TAG,"map values" + entry.getKey() + ": " + entry.getValue().toString());
-
-                editor.remove(entry.getKey());
-            }
-            editor.clear().apply();
-            Log.i(TAG,"TEST nakon brisanja: " + String.valueOf(sharedPreferences.contains("Avaz")));
+//            Log.d(TAG,"TEST nakon brisanja: " + String.valueOf(sharedPreferences.contains("Avaz")));
 
 
             return null;
@@ -149,13 +141,13 @@ public class LaunchActivity extends Activity {
             try {
 
                 // Get the current list.
-
+                SharedPreferences.Editor editor = sharedPreferences.edit();
 
 
                 Set<String> myStrings = new HashSet<>();
 
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                Log.i(TAG,"Sources: " + sourcesList);
+
+//                Log.i(TAG,"Sources: " + sourcesList);
                 JSONObject jsonObject = null;
                 JSONArray jsonArray = null;
 
@@ -164,10 +156,12 @@ public class LaunchActivity extends Activity {
                 for (int j = 0; j < jsonArray.length(); j++) {
                     JSONObject jobj = jsonArray.getJSONObject(j);
                     myStrings.add(jobj.getString("title"));
-
-                    editor.putString(jobj.getString("title"), jobj.getString("logo"));
-                    Log.i(TAG,"Title: " + jobj.getString("title"));
-                    Log.i(TAG,"Logo: " + jobj.getString("logo"));
+                    if (!sharedPreferences.contains(jobj.getString("title"))) {
+                        editor.putBoolean(jobj.getString("title"), true);
+                        Log.d("found new news site", jobj.getString("title"));
+                    }
+//                    Log.i(TAG,"Title: " + jobj.getString("title"));
+//                    Log.i(TAG,"Status: " + jobj.getBoolean("value"));
                 }
                 editor.apply();
 

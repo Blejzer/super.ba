@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.PaintDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,19 +22,17 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -69,19 +66,19 @@ public class MainActivity extends AppCompatActivity {
     private String mActivityTitle;
     SharedPreferences sharedPreferences;
     List<Article> arrayOfList = new ArrayList<>();
+    String [] filteri = {};
     int page = 0;
+    boolean pageChange = false;
 
-    private String [] filteri = {};
 
-
-    EditText emailText;
+//    EditText emailText;
     ListView responseView;
-    ProgressBar progressBar;
+//    ProgressBar progressBar;
 
     // Process handler
     Handler mHandler = new Handler();
     Intent returnIntent = new Intent();
-    String articlesList;
+    List<String> sourcesList = new ArrayList<>();
     private OAuth2IntentServiceReceiver mReceiver;
 
     @Override
@@ -134,32 +131,59 @@ public class MainActivity extends AppCompatActivity {
             where.add(entry.getKey());
         }
 
-        Log.w("Content of sp", ": ");
-        for (Map.Entry entry : sharedPreferencesAll.entrySet()) {
-            Log.w("SP: ",entry.getKey() + ", " + entry.getValue());
-        }
-
         String[] osArray = new String[ where.size() ];
         where.toArray( osArray );
 
 
+
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
+
         mDrawerList.setAdapter(mAdapter);
+
+        mAdapter.getView(0,null, null).setBackgroundColor(Color.BLACK);
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
                 try {
                     ColorDrawable buttonColor = (ColorDrawable) view.getBackground();
                     int colorId = buttonColor.getColor();
                     if (colorId ==Color.TRANSPARENT){
                         view.setBackgroundColor(Color.GRAY);
+                        sourcesList.remove(parent.getItemAtPosition(position).toString());
+                        editor.putBoolean(parent.getItemAtPosition(position).toString(), false);
                     }else if (colorId==Color.GRAY){
                         view.setBackgroundColor(Color.TRANSPARENT);
+                         sourcesList.add(parent.getItemAtPosition(position).toString());
+                         editor.putBoolean(parent.getItemAtPosition(position).toString(), true);
                     }
                 }catch (NullPointerException e){
                     Log.w("Color is NULL", "Null");
                     view.setBackgroundColor(Color.GRAY);
+                    sourcesList.remove(parent.getItemAtPosition(position).toString());
+                    editor.putBoolean(parent.getItemAtPosition(position).toString(), false);
+                }
+                for (String filter : sourcesList){
+                    Log.w("filter: ", filter);
+                }
+                editor.apply();
+
+                if(testWiFi()){
+
+                    mHandler.postDelayed(new Runnable() {
+                        public void run() {
+                            new MyAsyncTask().execute();
+
+                        }
+                    }, 2100);
+
+                }else{
+                    buildAlertMessageNoWiFi();
+                    setResult(RESULT_CANCELED, returnIntent);
+                    finish();
                 }
 
             }
@@ -172,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("News selector");
+                getSupportActionBar().setTitle("News Filter");
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
@@ -236,8 +260,19 @@ public class MainActivity extends AppCompatActivity {
 
         String articlesList;
 
+
         @Override
         protected Void doInBackground(String... strings) {
+
+            Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
+
+            Log.w("PAGINACIJA: ", page + "pages");
+            for (Map.Entry<String, ?> entry : sharedPreferencesAll.entrySet()){
+                Log.w("Entry: ", entry.getKey() +" " + entry.getValue());
+            }
+            if (!pageChange){
+                arrayOfList.clear();
+            }
 
             Config config = new Config();
 
@@ -256,7 +291,6 @@ public class MainActivity extends AppCompatActivity {
 //            Log.w("base64 string", base64);
 //            Log.w("test string", test);
             articlesList = token.getResource(oAuth2Client, token, test);
-
 
             return null;
         } // protected Void doInBackground(String... params)
@@ -307,10 +341,8 @@ public class MainActivity extends AppCompatActivity {
                     arrayOfList.add(article);
 
                 }
-                page++;
+                pageChange = false;
                 setAdapterToListview();
-
-
 
                 this.progressDialog.dismiss();
             } catch (JSONException e) {
@@ -319,8 +351,6 @@ public class MainActivity extends AppCompatActivity {
         } // protected void onPostExecute(Void v)
 
     } //class MyAsyncTask extends AsyncTask<String, String, Void>
-
-
 
 
 
@@ -376,13 +406,16 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
+
                 Log.w(LOG_MAIN, "onScrollStateChanged activated");
                 int threshold = 2;
                 int count = responseView.getCount();
-                Log.w(LOG_MAIN, "lastPosition="+responseView.getLastVisiblePosition()+" scrollState="+scrollState+" count="+count);
+                Log.d(LOG_MAIN, "lastPosition="+responseView.getLastVisiblePosition()+" scrollState="+scrollState+" count="+count);
                 if (scrollState == SCROLL_STATE_IDLE) {
                     if (responseView.getLastVisiblePosition() >= count - threshold) {
-                        Log.i(LOG_MAIN, "loading more data");
+                        Log.d(LOG_MAIN, "loading more data");
+                        page++;
+                        pageChange = true;
                         // Execute LoadMoreDataTask AsyncTask
                         if(testWiFi()){
 
@@ -411,25 +444,22 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
-//    if (!exists(article.getImage())){
-//        article.setImage("");
-//    }
 
-    public static boolean exists(String URLName){
-        try {
-            HttpURLConnection.setFollowRedirects(false);
-            // note : you may also need
-            //        HttpURLConnection.setInstanceFollowRedirects(false)
-            HttpURLConnection con =
-                    (HttpURLConnection) new URL(URLName).openConnection();
-            con.setRequestMethod("HEAD");
-            return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+//    public static boolean exists(String URLName){
+//        try {
+//            HttpURLConnection.setFollowRedirects(false);
+//            // note : you may also need
+//            //        HttpURLConnection.setInstanceFollowRedirects(false)
+//            HttpURLConnection con =
+//                    (HttpURLConnection) new URL(URLName).openConnection();
+//            con.setRequestMethod("HEAD");
+//            return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
+//        }
+//        catch (Exception e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
 
 
 }
