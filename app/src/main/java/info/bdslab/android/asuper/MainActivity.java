@@ -46,6 +46,7 @@ import java.util.regex.Pattern;
 import info.bdslab.android.asuper.Library.OAuth2Client;
 import info.bdslab.android.asuper.Library.Token;
 import info.bdslab.android.asuper.POJO.Article;
+import info.bdslab.android.asuper.POJO.MySimpleArrayAdapter;
 import info.bdslab.android.asuper.Services.OAuth2IntentServiceReceiver;
 import info.bdslab.android.asuper.Utils.Config;
 import info.bdslab.android.asuper.Utils.NewsRowAdapter;
@@ -136,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
+        mAdapter = new MySimpleArrayAdapter(this, osArray);
 
         mDrawerList.setAdapter(mAdapter);
 

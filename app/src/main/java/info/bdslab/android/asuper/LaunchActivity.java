@@ -112,6 +112,7 @@ public class LaunchActivity extends Activity {
             PreferenceManager.setDefaultValues(LaunchActivity.this, R.xml.sources, false);
             sharedPreferences = android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(LaunchActivity.this);
 
+//            sharedPreferences.edit().clear().commit();
 
 //            HashMap<String, Integer> sharedPreferencesAll = new HashMap<String, Integer>();
 //            Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
@@ -142,7 +143,6 @@ public class LaunchActivity extends Activity {
 
                 // Get the current list.
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-
 
                 Set<String> myStrings = new HashSet<>();
 
