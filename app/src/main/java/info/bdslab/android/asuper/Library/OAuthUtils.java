@@ -64,7 +64,7 @@ public class OAuthUtils {
 
             HttpEntity entity = response.getEntity();
             responseString = EntityUtils.toString(entity, "UTF-8");
-            System.out.println(responseString);
+//            System.out.println(responseString);
             //handleResponse(response);
 
         } catch (ClientProtocolException e) {

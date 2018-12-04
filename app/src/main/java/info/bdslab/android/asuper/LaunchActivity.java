@@ -60,14 +60,14 @@ public class LaunchActivity extends Activity {
                 }
             }, 2100);
 
-            mHandler.postDelayed(new Runnable() {
-                public void run() {
-                    Intent i = new Intent(LaunchActivity.this, MainActivity.class);
-                    Log.d(TAG, "Zavrsavamo Launch, pokrecem Main!");
-                    finish();
-                    startActivity(i);
-                }
-            }, 2100);
+//            mHandler.postDelayed(new Runnable() {
+//                public void run() {
+//                    Intent i = new Intent(LaunchActivity.this, MainActivity.class);
+//                    Log.d(TAG, "Zavrsavamo Launch, pokrecem Main!");
+//                    finish();
+//                    startActivity(i);
+//                }
+//            }, 2100);
 
         } else{
             //TODO create warning activity for testing internet connection
@@ -139,6 +139,8 @@ public class LaunchActivity extends Activity {
 
         protected void onPostExecute(Void v) {
             //parse JSON data
+
+
             try {
 
                 // Get the current list.
@@ -191,6 +193,19 @@ public class LaunchActivity extends Activity {
 //                }
 
 //                this.progressDialog.dismiss();
+
+
+                mHandler.postDelayed(new Runnable() {
+                    public void run() {
+                        Intent i = new Intent(LaunchActivity.this, MainActivity.class);
+                        Log.d(TAG, "Zavrsavamo Launch, pokrecem Main!");
+                        finish();
+                        startActivity(i);
+                    }
+                }, 2100);
+
+
+
             } catch (JSONException e) {
                 Log.e("JSONException", "Error: " + e.toString());
             } // catch (JSONException e)

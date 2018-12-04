@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     // Process handler
     Handler mHandler = new Handler();
     Intent returnIntent = new Intent();
-    List<String> sourcesList = new ArrayList<>();
+//    List<String> sourcesList = new ArrayList<>();
     private OAuth2IntentServiceReceiver mReceiver;
 
     @Override
@@ -135,13 +135,9 @@ public class MainActivity extends AppCompatActivity {
         String[] osArray = new String[ where.size() ];
         where.toArray( osArray );
 
-
-
         mAdapter = new MySimpleArrayAdapter(this, osArray);
 
         mDrawerList.setAdapter(mAdapter);
-
-        mAdapter.getView(0,null, null).setBackgroundColor(Color.BLACK);
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -154,30 +150,41 @@ public class MainActivity extends AppCompatActivity {
                     int colorId = buttonColor.getColor();
                     if (colorId ==Color.TRANSPARENT){
                         view.setBackgroundColor(Color.GRAY);
-                        sourcesList.remove(parent.getItemAtPosition(position).toString());
+//                        sourcesList.remove(parent.getItemAtPosition(position).toString());
                         editor.putBoolean(parent.getItemAtPosition(position).toString(), false);
                     }else if (colorId==Color.GRAY){
                         view.setBackgroundColor(Color.TRANSPARENT);
-                         sourcesList.add(parent.getItemAtPosition(position).toString());
+//                         sourcesList.add(parent.getItemAtPosition(position).toString());
                          editor.putBoolean(parent.getItemAtPosition(position).toString(), true);
                     }
                 }catch (NullPointerException e){
                     Log.w("Color is NULL", "Null");
                     view.setBackgroundColor(Color.GRAY);
-                    sourcesList.remove(parent.getItemAtPosition(position).toString());
+//                    sourcesList.remove(parent.getItemAtPosition(position).toString());
                     editor.putBoolean(parent.getItemAtPosition(position).toString(), false);
                 }
-                for (String filter : sourcesList){
-                    Log.w("filter: ", filter);
+//                for (String filter : sourcesList){
+//                    Log.w("filter: ", filter);
+//                }
+                editor.commit();
+                List<String> update = new ArrayList<>();
+                Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
+                for (Map.Entry<String, ?> entry : sharedPreferencesAll.entrySet()) {
+                    if (entry.getValue().equals(true)) {
+                        update.add(entry.getKey());
+                    }
                 }
-                editor.apply();
+
+                update.toArray( filteri );
+                for (int i=0; i<filteri.length; i++){
+                    Log.w("pozicija "+i, filteri[i]);
+                }
 
                 if(testWiFi()){
 
                     mHandler.postDelayed(new Runnable() {
                         public void run() {
                             new MyAsyncTask().execute();
-
                         }
                     }, 2100);
 
@@ -265,12 +272,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(String... strings) {
 
-            Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
+//            Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
 
-            Log.w("PAGINACIJA: ", page + "pages");
-            for (Map.Entry<String, ?> entry : sharedPreferencesAll.entrySet()){
-                Log.w("Entry: ", entry.getKey() +" " + entry.getValue());
-            }
+//            Log.w("PAGINACIJA: ", page + "pages");
+//            for (Map.Entry<String, ?> entry : sharedPreferencesAll.entrySet()){
+//                Log.w("Entry: ", entry.getKey() +" " + entry.getValue());
+//            }
             if (!pageChange){
                 arrayOfList.clear();
             }
@@ -311,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
             //parse JSON data
             try {
 
-                Log.i(LOG_MAIN, "Articles: " + articlesList);
+//                Log.i(LOG_MAIN, "Articles: " + articlesList);
 
                 JSONObject jsonArticle = null;
                 JSONObject jsonSource = null;
