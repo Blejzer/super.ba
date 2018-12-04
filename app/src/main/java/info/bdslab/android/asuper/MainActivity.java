@@ -127,13 +127,20 @@ public class MainActivity extends AppCompatActivity {
     private void addDrawerItems() {
 //        String[] osArray = new String[]{};
         List<String> where = new ArrayList<>();
+        List<String> filters = new ArrayList<>();
         Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
         for (Map.Entry<String, ?> entry : sharedPreferencesAll.entrySet()) {
             where.add(entry.getKey());
+            if(entry.getValue().equals(false)){
+                filters.add(entry.getKey());
+            }
         }
 
         String[] osArray = new String[ where.size() ];
+        String[] filterLista = new String[filters.size()];
         where.toArray( osArray );
+        filters.toArray(filterLista);
+        filteri = filterLista;
 
         mAdapter = new MySimpleArrayAdapter(this, osArray);
 
@@ -167,15 +174,20 @@ public class MainActivity extends AppCompatActivity {
 //                    Log.w("filter: ", filter);
 //                }
                 editor.commit();
-                List<String> update = new ArrayList<>();
+                List<String> test = new ArrayList<>();
                 Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
                 for (Map.Entry<String, ?> entry : sharedPreferencesAll.entrySet()) {
-                    if (entry.getValue().equals(true)) {
-                        update.add(entry.getKey());
+                    if(entry.getValue().equals(false)){
+                    test.add(entry.getKey());
                     }
                 }
 
-                update.toArray( filteri );
+                String[] osArray = new String[ test.size() ];
+                test.toArray( osArray );
+
+                System.out.print("Fliteri:"+ " "+ osArray.length);
+                filteri = osArray;
+
                 for (int i=0; i<filteri.length; i++){
                     Log.w("pozicija "+i, filteri[i]);
                 }
@@ -272,6 +284,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(String... strings) {
 
+            for (int i =0; i<filteri.length; i++){
+                Log.w("pozicija: "+i, " "+ filteri[i]);
+            }
 //            Map<String, ?> sharedPreferencesAll = sharedPreferences.getAll();
 
 //            Log.w("PAGINACIJA: ", page + "pages");
@@ -290,14 +305,15 @@ public class MainActivity extends AppCompatActivity {
 
             oAuth2Client.setSite(config.getSITE());
 
+
             JSONArray jsonArray = new JSONArray(Arrays.asList(filteri));
 
 //            Log.w("jsonArray string", jsonArray.toString()+";");
             byte [] data = jsonArray.toString().getBytes(Charset.forName("UTF-8"));
             String base64 = Base64.encodeToString(data, Base64.NO_WRAP);
             String test = config.getPATHARTICLES() + config.getOFFSET()+String.valueOf(page*10) + config.getFILTERS()+base64;
-//            Log.w("base64 string", base64);
-//            Log.w("test string", test);
+            Log.w("base64 string", base64);
+            Log.w("test string", test);
             articlesList = token.getResource(oAuth2Client, token, test);
 
             return null;
