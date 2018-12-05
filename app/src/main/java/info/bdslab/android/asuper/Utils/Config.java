@@ -17,7 +17,7 @@ public class Config {
     String PATHSOURCES = "api/v1/sources";
     String CATEGORY = "?category=BiH";
     String OFFSET = "?offset=";
-    String LIMIT = "?limit=10";
+    String LIMIT = "?limit=12";
     String FILTERS = "&filters=";
 
 

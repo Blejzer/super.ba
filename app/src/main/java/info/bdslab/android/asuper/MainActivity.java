@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
                 String[] osArray = new String[ test.size() ];
                 test.toArray( osArray );
 
-                System.out.print("Fliteri:"+ " "+ osArray.length);
+//                System.out.print("Fliteri:"+ " "+ osArray.length);
                 filteri = osArray;
 
                 for (int i=0; i<filteri.length; i++){
@@ -295,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
             if (!pageChange){
                 arrayOfList.clear();
+                page=0;
             }
 
             Config config = new Config();
@@ -355,11 +356,14 @@ public class MainActivity extends AppCompatActivity {
                     jsonSource = jsonArticle.getJSONObject("source");
                     article.setSource(jsonSource.getString("title"));
                     article.setLogo(jsonSource.getString("logo"));
-
-                    article.setImage(jsonArticle.getString("image"));
-                    matcher = pattern.matcher(article.getImage());
-                    if(!matcher.matches()){
-                        article.setImage(article.getImage().replaceAll(pattern.pattern(), ""));
+                    try {
+                        article.setImage(jsonArticle.getString("image"));
+                        matcher = pattern.matcher(article.getImage());
+                        if (!matcher.matches()) {
+                            article.setImage(article.getImage().replaceAll(pattern.pattern(), ""));
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
 
                     arrayOfList.add(article);

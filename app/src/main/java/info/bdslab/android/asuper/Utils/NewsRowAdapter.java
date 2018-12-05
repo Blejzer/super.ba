@@ -132,6 +132,7 @@ public class NewsRowAdapter extends ArrayAdapter<Article> {
                                 @Override
                                 public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
                                     pbar.setVisibility(View.INVISIBLE);
+                                    holder.imgView.setImageResource(R.drawable.ic_launcher);
                                 }
 
                                 @Override
@@ -161,6 +162,9 @@ public class NewsRowAdapter extends ArrayAdapter<Article> {
                     if(!objBean.getLogo().endsWith("jpg") && !objBean.getLogo().endsWith("png") && !objBean.getLogo().endsWith("bmp") && objBean.getImage().contains("?")){
                         Log.d(TAG, "Image: "+ objBean.getImage().substring(0,objBean.getImage().indexOf("?")));
                         objBean.setLogo(objBean.getLogo().substring(0,objBean.getLogo().indexOf("?")));
+                    }
+                    if (objBean.getLogo().contains("ba.n1info.com")){
+                        objBean.setLogo("http://ba.n1info.com/Static/Picture/n1v2logo.png");
                     }
                     imageLoader.displayImage(objBean.getLogo(), holder.slogoView,
                             options, new ImageLoadingListener() {
